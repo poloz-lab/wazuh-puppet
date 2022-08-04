@@ -20,6 +20,7 @@ class wazuh::filebeat_oss (
   $filebeat_path_certs = '/etc/filebeat/certs',
 
   $manage_certs = true,
+  $use_system_ca = false,
 ) {
   include wazuh::repo_elastic_oss
 
