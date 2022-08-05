@@ -3,7 +3,7 @@
 class wazuh::dashboard (
   $dashboard_package = 'wazuh-dashboard',
   $dashboard_service = 'wazuh-dashboard',
-  $dashboard_version = '5.0.0',
+  $dashboard_version = '4.9.1-1',
   $indexer_server_ip = 'localhost',
   $indexer_server_port = '9200',
   $manager_api_host = '127.0.0.1',
@@ -36,19 +36,9 @@ class wazuh::dashboard (
   $use_system_ca = false,
 ) {
 
-  # assign version according to the package manager
-  case $facts['os']['family'] {
-    'Debian': {
-      $dashboard_version_install = "${dashboard_version}-*"
-    }
-    'Linux', 'RedHat', default: {
-      $dashboard_version_install = $dashboard_version
-    }
-  }
-
   # install package
   package { 'wazuh-dashboard':
-    ensure => $dashboard_version_install,
+    ensure => $dashboard_version,
     name   => $dashboard_package,
   }
 
