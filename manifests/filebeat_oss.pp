@@ -56,7 +56,7 @@ class wazuh::filebeat_oss (
   -> file { '/etc/filebeat/wazuh-template.json':
     owner   => 'root',
     group   => 'root',
-    mode    => '0440',
+    mode    => '0444',
     replace => false,  # only copy content when file not exist
     source  => "https://raw.githubusercontent.com/wazuh/wazuh/${wazuh_extensions_version}/extensions/elasticsearch/7.x/wazuh-template.json",
     notify  => Service['filebeat'],
