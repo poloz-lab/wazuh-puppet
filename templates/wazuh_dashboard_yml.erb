@@ -17,9 +17,13 @@ opensearch_security.openid.client_secret: <%= @opensearch_security_openid_client
 opensearch_security.openid.base_redirect_url: <%= @opensearch_security_openid_base_redirect_url %>
 opensearch_security.openid.verify_hostnames: <%= @opensearch_security_openid_verify_hostnames %>
 <% end -%>
+<% if @dashboard_server_protocol == 'https' -%>
 server.ssl.enabled: true
 server.ssl.key: "<%= @dashboard_path_certs %>/dashboard-key.pem"
 server.ssl.certificate: "<%= @dashboard_path_certs %>/dashboard.pem"
+<% else -%>
+server.ssl.enabled: false
+<% end -%>
 <% if not @use_system_ca -%>
 opensearch.ssl.certificateAuthorities: ["<%= @dashboard_path_certs %>/root-ca.pem"]
 <% end -%>
