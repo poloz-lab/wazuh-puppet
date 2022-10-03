@@ -56,9 +56,9 @@ class wazuh::filebeat_oss (
     require => Package['filebeat'],
   }
 
-  archive { "/tmp/${$wazuh_filebeat_module}":
+  archive { "/tmp/${wazuh_filebeat_module}":
     ensure       => present,
-    source       => "https://packages.wazuh.com/4.x/filebeat/${$wazuh_filebeat_module}",
+    source       => "https://packages.wazuh.com/4.x/filebeat/${wazuh_filebeat_module}",
     extract      => true,
     extract_path => '/usr/share/filebeat/module',
     creates      => '/usr/share/filebeat/module/wazuh',
