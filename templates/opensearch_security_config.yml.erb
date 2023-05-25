@@ -17,6 +17,7 @@ config:
           challenge: false
         authentication_backend:
           type: internal
+    <% if @openid_connect_url -%>
       openid_auth_domain:
         http_enabled: true
         transport_enabled: true
@@ -31,3 +32,4 @@ config:
             verify_hostnames: false
         authentication_backend:
           type: noop
+    <% end -%>
