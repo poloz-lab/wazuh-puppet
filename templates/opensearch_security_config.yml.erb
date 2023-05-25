@@ -13,7 +13,7 @@ config:
         order: 0
         http_authenticator:
           type: basic
-          challenge: false
+          challenge: true
         authentication_backend:
           type: internal
     <% if @openid_connect_url -%>
