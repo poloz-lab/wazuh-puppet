@@ -90,10 +90,9 @@ class wazuh::indexer (
     notify  => Service['wazuh-indexer'],
   }
 
-  file {
-    '/usr/share/wazuh-indexer/plugins/opensearch-security/securityconfig/config.yml':
-      content => template('wazuh/opensearch_security_config.yml.erb'),
-      notify  => Service['wazuh-indexer'],
+  file { '/usr/share/wazuh-indexer/plugins/opensearch-security/securityconfig/config.yml':
+    content => template('wazuh/opensearch_security_config.yml.erb'),
+    notify  => Service['wazuh-indexer'],
   }
 
   file_line { 'Insert line initial size of total heap space':
