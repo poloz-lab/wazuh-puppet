@@ -31,6 +31,7 @@ class wazuh::dashboard (
   ],
 
   $manage_repos = false, # Change to true when manager is not present.
+  $use_system_ca = false,
 ) {
   if $manage_repos {
     include wazuh::repo

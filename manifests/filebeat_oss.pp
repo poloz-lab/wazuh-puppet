@@ -18,6 +18,8 @@ class wazuh::filebeat_oss (
   $filebeat_fileuser = 'root',
   $filebeat_filegroup = 'root',
   $filebeat_path_certs = '/etc/filebeat/certs',
+
+  $use_system_ca = false,
 ) {
   include wazuh::repo
 
