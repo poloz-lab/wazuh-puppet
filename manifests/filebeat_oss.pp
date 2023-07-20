@@ -80,34 +80,36 @@ class wazuh::filebeat_oss (
     require => Package['filebeat'],
   }
 
-  require wazuh::certificates
+  if $manage_certs {
+    require wazuh::certificates
 
-  exec { "ensure full path of ${filebeat_path_certs}":
-    path    => '/usr/bin:/bin',
-    command => "mkdir -p ${filebeat_path_certs}",
-    creates => $filebeat_path_certs,
-    require => Package['filebeat'],
-  }
-  -> file { $filebeat_path_certs:
-    ensure => directory,
-    owner  => $filebeat_fileuser,
-    group  => $filebeat_filegroup,
-    mode   => '0500',
-  }
+    exec { "ensure full path of ${filebeat_path_certs}":
+      path    => '/usr/bin:/bin',
+      command => "mkdir -p ${filebeat_path_certs}",
+      creates => $filebeat_path_certs,
+      require => Package['filebeat'],
+    }
+    -> file { $filebeat_path_certs:
+      ensure => directory,
+      owner  => $filebeat_fileuser,
+      group  => $filebeat_filegroup,
+      mode   => '0500',
+    }
 
-  $_certfiles = {
-    'server.pem'     => 'filebeat.pem',
-    'server-key.pem' => 'filebeat-key.pem',
-    'root-ca.pem'    => 'root-ca.pem',
-  }
-  $_certfiles.each |String $certfile_source, String $certfile_target| {
-    file { "${filebeat_path_certs}/${certfile_target}":
-      ensure  => file,
-      owner   => $filebeat_fileuser,
-      group   => $filebeat_filegroup,
-      mode    => '0400',
-      replace => false,  # only copy content when file not exist
-      source  => "/tmp/wazuh-certificates/${certfile_source}",
+    $_certfiles = {
+      'server.pem'     => 'filebeat.pem',
+      'server-key.pem' => 'filebeat-key.pem',
+      'root-ca.pem'    => 'root-ca.pem',
+    }
+    $_certfiles.each |String $certfile_source, String $certfile_target| {
+      file { "${filebeat_path_certs}/${certfile_target}":
+        ensure  => file,
+        owner   => $filebeat_fileuser,
+        group   => $filebeat_filegroup,
+        mode    => '0400',
+        replace => false,  # only copy content when file not exist
+        source  => "/tmp/wazuh-certificates/${certfile_source}",
+      }
     }
   }
 
