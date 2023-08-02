@@ -1,6 +1,10 @@
 server.host: <%= @dashboard_server_host %>
 server.port: <%= @dashboard_server_port %>
-opensearch.hosts: <%= @dashboard_server_hosts %>
+<% if @dashboard_server_hosts.is_a? Array -%>
+opensearch.hosts: [<%= @dashboard_server_hosts.map { |host| "\"#{host}\"" }.join(', ') %>]
+<% else -%>
+opensearch.hosts: "<%= @dashboard_server_hosts %>"
+<% end -%>
 opensearch.ssl.verificationMode: certificate
 <% if @dashboard_user and @dashboard_password -%>
 opensearch.username: <%= @dashboard_user %>
