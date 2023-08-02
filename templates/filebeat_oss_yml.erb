@@ -13,7 +13,11 @@ setup.template.overwrite: true
 
 # Send events directly to Indexer
 output.elasticsearch:
+<% if @filebeat_oss_indexer_ip.is_a? Array -%>
+  hosts: [<%= @filebeat_oss_indexer_ip.map { |host| "\"#{host}\"" }.join(', ') %>]
+<% else -%>
   hosts: ["https://<%= @filebeat_oss_indexer_ip %>:<%= @filebeat_oss_indexer_port %>"]
+<% end -%>
   username: <%= @filebeat_oss_elastic_user %>
   password: <%= @filebeat_oss_elastic_password %>
   protocol: https
