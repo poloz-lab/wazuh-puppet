@@ -370,6 +370,7 @@ class wazuh::manager (
       owner   => $wazuh::params_manager::config_owner,
       group   => $wazuh::params_manager::config_group,
       mode    => $wazuh::params_manager::config_mode,
+      replace => false,
       notify  => Service[$wazuh::params_manager::server_service],
       require => Package[$wazuh::params_manager::server_package];
     $wazuh::params_manager::shared_agent_config_file:
