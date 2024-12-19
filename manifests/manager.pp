@@ -367,9 +367,9 @@ class wazuh::manager (
 
   file {
     default:
-      owner   => $wazuh::params_manager::config_owner,
-      group   => $wazuh::params_manager::config_group,
-      mode    => $wazuh::params_manager::config_mode,
+      owner   => 'wazuh',
+      group   => 'wazuh',
+      mode    => '0660',
       replace => false,
       notify  => Service[$wazuh::params_manager::server_service],
       require => Package[$wazuh::params_manager::server_package];
