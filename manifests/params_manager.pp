@@ -293,7 +293,7 @@ class wazuh::params_manager {
       $config_file = '/var/ossec/etc/ossec.conf'
       $shared_agent_config_file = '/var/ossec/etc/shared/default/agent.conf'
 
-      $config_mode = '0640'
+      $config_mode = '0660'
       $config_owner = 'root'
       $config_group = 'wazuh'
 
