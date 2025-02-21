@@ -13,18 +13,20 @@ class wazuh::repo (
         ensure_packages(['apt-transport-https', 'gnupg'], {'ensure' => 'present'})
       }
       exec { 'import-wazuh-key':
-        path =>  [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ],
+        path    =>  [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ],
         command => 'curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | gpg --no-default-keyring --keyring /usr/share/keyrings/wazuh.gpg --import',
         unless  => 'gpg --no-default-keyring --keyring /usr/share/keyrings/wazuh.gpg --list-keys | grep -q 29111145',
+        notify  => Exec['apt-update'],
       }
 
       # Ensure permissions on the keyring
       file { '/usr/share/keyrings/wazuh.gpg':
-        ensure => file,
-        owner  => 'root',
-        group  => 'root',
-        mode   => '0644',
+        ensure  => file,
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0644',
         require => Exec['import-wazuh-key'],
+        notify  => Exec['apt-update'],
       }
       case $::lsbdistcodename {
         /(jessie|wheezy|stretch|buster|bullseye|bookworm|sid|precise|trusty|vivid|wily|xenial|yakketi|bionic|focal|groovy|jammy)/: {
@@ -39,6 +41,7 @@ class wazuh::repo (
               'deb' => true,
             },
             require => File['/usr/share/keyrings/wazuh.gpg'],
+            notify  => Exec['apt-update'],
           }
           # Manage the APT source list file content using concat
           concat { '/etc/apt/sources.list.d/wazuh.list':
@@ -46,6 +49,7 @@ class wazuh::repo (
             owner   => 'root',
             group   => 'root',
             mode    => '0644',
+            notify  => Exec['apt-update'],
           }
 
           concat::fragment { 'wazuh-source':
@@ -53,15 +57,15 @@ class wazuh::repo (
             content => "deb [signed-by=/usr/share/keyrings/wazuh.gpg] $wazuh_repo_url $repo_release main\n",
             order   => '01',
             require => File['/usr/share/keyrings/wazuh.gpg'],
-            before  => Exec['apt-update'],
           }
         }
         default: { fail('This ossec module has not been tested on your distribution (or lsb package not installed)') }
       }
       # Define an exec resource to run 'apt-get update'
       exec { 'apt-update':
-        command => 'apt-get update',
-        path    => ['/bin', '/usr/bin'],
+        command     => 'apt-get update',
+        refreshonly => true,
+        path        => ['/bin', '/usr/bin'],
       }
     }
     'Linux', 'RedHat', 'Suse' : {
